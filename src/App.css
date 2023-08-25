@@ -15,7 +15,8 @@ select {
 
 input:focus,
 textarea:focus,
-select:focus {
+select:focus,
+.css-t3ipsp-control {
   border: 2px solid teal !important;
   text-decoration: none !important;
   outline: 0 !important;
