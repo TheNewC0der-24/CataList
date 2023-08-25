@@ -3,7 +3,6 @@ textarea,
 select {
   text-decoration: none !important;
   outline: 0 !important;
-  border-radius: 0 !important;
   box-shadow: none !important;
 }
 
@@ -17,7 +16,7 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: teal !important;
+  border: 2px solid teal !important;
   text-decoration: none !important;
   outline: 0 !important;
   box-shadow: none !important;
