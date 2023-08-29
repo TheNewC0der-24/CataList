@@ -3,6 +3,10 @@ import { useNote } from "../Layout/NoteLayout";
 
 import { Badge, Button, Col, Row, Stack } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function Note() {
 
@@ -39,7 +43,34 @@ function Note() {
                     </Stack>
                 </Col>
             </Row>
-            <ReactMarkdown>{note.markdown}</ReactMarkdown>
+            <div className="p-5" style={{ backgroundColor: "#fff" }}>
+                <ReactMarkdown
+                    rehypePlugins={[rehypeRaw as any]}
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                        code({ node, inline, className, children, ...props }) {
+                            const match = /language-(\w+)/.exec(className || '')
+                            return !inline && match ? (
+                                <SyntaxHighlighter
+                                    {...props}
+                                    children={String(children).replace(/\n$/, '')}
+                                    style={a11yDark}
+                                    language={match[1]}
+                                    PreTag="div"
+                                    wrapLines={true}
+                                    showLineNumbers={true}
+                                />
+                            ) : (
+                                <code {...props} className={className}>
+                                    {children}
+                                </code>
+                            )
+                        }
+                    }}
+                >
+                    {note.markdown}
+                </ReactMarkdown>
+            </div>
         </>
     )
 }
