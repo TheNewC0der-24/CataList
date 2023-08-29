@@ -12,15 +12,15 @@ type NoteFormProps = {
     onSubmit: (data: NoteData) => void;
     onAddTag: (tag: Tag) => void;
     availableTags: Tag[];
-}
+} & Partial<NoteData>;
 
-export default function NoteForm({ onSubmit, onAddTag, availableTags }: NoteFormProps) {
+export default function NoteForm({ onSubmit, onAddTag, availableTags, title = "", markdown = "", tags = [] }: NoteFormProps) {
 
     const navigate = useNavigate();
 
     const titleRef = useRef<HTMLInputElement>(null);
     const markdownRef = useRef<HTMLTextAreaElement>(null);
-    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+    const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -41,7 +41,7 @@ export default function NoteForm({ onSubmit, onAddTag, availableTags }: NoteForm
                     <Col sm={6}>
                         <Form.Group className="mb-3" controlId="title">
                             <Form.Label>Title</Form.Label>
-                            <Form.Control ref={titleRef} required />
+                            <Form.Control ref={titleRef} defaultValue={title} required />
                         </Form.Group>
                     </Col>
                     <Col sm={6}>
@@ -70,7 +70,7 @@ export default function NoteForm({ onSubmit, onAddTag, availableTags }: NoteForm
                 </Row>
                 <Form.Group className="mb-3" controlId="markdown">
                     <Form.Label>Body</Form.Label>
-                    <Form.Control ref={markdownRef} as="textarea" rows={15} required />
+                    <Form.Control ref={markdownRef} as="textarea" rows={15} defaultValue={markdown} required />
                 </Form.Group>
 
                 <Stack gap={2} direction="horizontal" className="justify-content-end">
