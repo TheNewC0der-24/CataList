@@ -1,16 +1,26 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNote } from "../Layout/NoteLayout";
 
 import { Badge, Button, Col, Row, Stack } from "react-bootstrap";
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-function Note() {
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
+
+type NoteProps = {
+    onDelete: (id: string) => void;
+}
+
+function Note({ onDelete }: NoteProps) {
 
     const note = useNote();
+
+    const [modalShow, setModalShow] = useState(false);
 
     return (
         <>
@@ -36,41 +46,49 @@ function Note() {
                                 Edit
                             </Button>
                         </Link>
-                        <Button variant='outline-danger'>Delete</Button>
+                        <Button variant='outline-danger' onClick={() => {
+                            setModalShow(true);
+                        }}>Delete</Button>
                         <Link to="/">
                             <Button variant='outline' style={{ borderColor: "teal", color: "teal" }}>Back</Button>
                         </Link>
                     </Stack>
                 </Col>
             </Row>
-            <div className="p-5" style={{ backgroundColor: "#fff" }}>
-                <ReactMarkdown
-                    rehypePlugins={[rehypeRaw as any]}
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                        code({ node, inline, className, children, ...props }) {
-                            const match = /language-(\w+)/.exec(className || '')
-                            return !inline && match ? (
-                                <SyntaxHighlighter
-                                    {...props}
-                                    children={String(children).replace(/\n$/, '')}
-                                    style={a11yDark}
-                                    language={match[1]}
-                                    PreTag="div"
-                                    wrapLines={true}
-                                    showLineNumbers={true}
-                                />
-                            ) : (
-                                <code {...props} className={className}>
-                                    {children}
-                                </code>
-                            )
-                        }
-                    }}
-                >
-                    {note.markdown}
-                </ReactMarkdown>
-            </div>
+            <ReactMarkdown
+                rehypePlugins={[rehypeRaw as any]}
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return !inline && match ? (
+                            <SyntaxHighlighter
+                                {...props}
+                                children={String(children).replace(/\n$/, '')}
+                                style={a11yDark}
+                                language={match[1]}
+                                PreTag="div"
+                                wrapLines={true}
+                                showLineNumbers={true}
+                            />
+                        ) : (
+                            <code {...props} className={className}>
+                                {children}
+                            </code>
+                        )
+                    }
+                }}
+            >
+                {note.markdown}
+            </ReactMarkdown>
+
+            <ConfirmDeleteModal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                onDelete={onDelete}
+                id={note.id}
+                title={note.title}
+            />
         </>
     )
 }
