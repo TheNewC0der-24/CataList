@@ -72,15 +72,33 @@ export default function NoteList({ availableTags, notes }: NoteListProps) {
                 </Row>
             </Form>
 
-            <Row xs={1} sm={2} lg={3} xl={4} className="g-3">
-                {
-                    filteredNotes.map(note => (
-                        <Col key={note.id}>
-                            <NoteCard id={note.id} title={note.title} tags={note.tags} />
-                        </Col>
-                    ))
-                }
-            </Row>
+            {
+                filteredNotes.length === 0 ? (
+                    <>
+                        <h3>No notes found</h3>
+                        <p>Try changing the search query or removing some filters</p>
+
+                        <h1 className="mt-4">OR</h1>
+
+                        <Link to="/new">
+                            <Button className="my-3" style={{ backgroundColor: "teal", borderColor: "teal" }}>
+                                Create New Note
+                            </Button>
+                        </Link>
+                    </>
+                ) : (
+
+                    <Row xs={1} sm={2} lg={3} xl={4} className="g-3">
+                        {
+                            filteredNotes.map(note => (
+                                <Col key={note.id}>
+                                    <NoteCard id={note.id} title={note.title} tags={note.tags} />
+                                </Col>
+                            ))
+                        }
+                    </Row>
+                )
+            }
         </>
     )
 }
