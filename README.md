@@ -62,6 +62,10 @@ npm run dev
 Contributions are welcome! If you find a bug or have a feature suggestion, please open an issue on the GitHub repository. If you'd like to contribute code, fork the repository, create a new branch, make your 
 changes, and submit a pull request.
 
+### Ideas for contribution
+- [ ] Adding Firebase
+- [ ] Improve UI
+
 ## Link
 ```
 https://cata-list.netlify.app/
@@ -69,7 +73,7 @@ https://cata-list.netlify.app/
 
 ---
 
-Feel free to reach out if you have any questions or feedback. Happy note-taking with CataList! 📝
+### Feel free to reach out if you have any questions or feedback. Happy note-taking with CataList! 📝
 
 
 
